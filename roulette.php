@@ -3,6 +3,9 @@
 //Démarre la session pour accéder aux infos du joueur
 session_start();
 
+//J'inclus ma classe DB
+require_once('./classes/DB.php');
+
 //Je redirige sur la page de connexion s'il n'existe pas de session sur le joueur
 if (!isset($_SESSION['username'])) {
     header('Location: connexion.php');
@@ -74,32 +77,13 @@ if (count($_POST) > 0) {
                 }
             }
 
+            var_dump($_SESSION);
+
             //Dans tous les cas, j'ajoute cette ligne de jeu dans la base de données
             //et je mets à jouer l'argent disponible du joueur
-            try {
-                //Connexion à la base de données
-                $db = new PDO('mysql:host=localhost:3308;dbname=roulette;charset=utf8;', 'root', 'root');
-                //Insertion de informations sur le jeu
-                //Création requête + préparation + éxécution
-                $query = 'INSERT INTO game(id,player,date,bet,profit) VALUES (DEFAULT,:v_player,DEFAULT,:v_bet,:v_profit)';
-                $prepared = $db->prepare($query);
-                $prepared->execute(array(
-                    'v_player' => $_SESSION['iduser'],
-                    'v_bet' => $_POST['mise'],
-                    'v_profit' => $gain
-                ));
+            $db = new DB();
 
-                //Mise à jour de l'argent du joueur
-                //Création requête + préparation + éxécution
-                $query = 'UPDATE player SET money=v_money WHERE id=v_player_id';
-                $prepared = $db->prepare($query);
-                $prepared->execute(array(
-                    'v_money' => $_SESSION['money'],
-                    'v_player_id' => $_SESSION['iduser']
-                ));
-            } catch (Exception $e) {
-                die('Erreur : ' . $e->getMessage());
-            }
+            $db->addGamePlayer($_SESSION['iduser'], $_POST['mise'], $gain, $_SESSION['money']);
         } else {
             $tirage_result['success'] = false;
             $tirage_result['message'] = 'Votre mise est supérieure à votre balance';

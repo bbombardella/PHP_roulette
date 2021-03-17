@@ -167,39 +167,35 @@ class DB
 
     public function updatePlayer($attr, $player_id, $player_update_data)
     {
-        switch ($attr) {
-            //Pour la mise à jour
-            case 'balance':
-                try {
-                    //Mise à jour de l'argent du joueur
-                    //Création requête + préparation + éxécution
-                    $query = 'UPDATE player SET money=v_money WHERE id=v_player_id';
-                    $prepared = $this->bdd->prepare($query);
-                    $prepared->execute(array(
-                        'v_money' => $player_update_data,
-                        'v_player_id' => $player_id
-                    ));
-                } catch (Exception $e) {
-                    die("Erreur mise à jour de l'argent du joueur. {$e->getMessage()}");
-                }
-                break;
-            //Pour la mise à jour du mot de passe déjà "hashé"
-            case 'password':
-                try {
-                    //Mise à jour du mot de passe du joueur déjà "hashé"
-                    //Création requête + préparation + éxécution
-                    $query = 'UPDATE player SET password=v_password WHERE id=v_player_id';
-                    $prepared = $this->bdd->prepare($query);
-                    $prepared->execute(array(
-                        'v_money' => $player_update_data,
-                        'v_player_id' => $player_id
-                    ));
-                } catch (Exception $e) {
-                    die("Erreur mise à jour du mot de passe. {$e->getMessage()}");
-                }
-                break;
+        //Pour la mise à jour
+        if ($attr === 'balance') {
+            try {
+                //Mise à jour de l'argent du joueur
+                //Création requête + préparation + éxécution
+                $query = 'UPDATE player SET money=:v_money WHERE id=:v_player_id';
+                $prepared = $this->bdd->prepare($query);
+                $prepared->execute(array(
+                    'v_money' => $player_update_data,
+                    'v_player_id' => $player_id
+                ));
+            } catch (Exception $e) {
+                die("Erreur mise à jour de l'argent du joueur. {$e->getMessage()}");
+            }
+        } else if ($attr === 'password') { //Pour la mise à jour du mot de passe déjà "hashé"
+            try {
+                //Mise à jour du mot de passe du joueur déjà "hashé"
+                //Création requête + préparation + éxécution
+                $query = 'UPDATE player SET password=:v_password WHERE id=:v_player_id';
+                $prepared = $this->bdd->prepare($query);
+                $prepared->execute(array(
+                    'v_money' => $player_update_data,
+                    'v_player_id' => $player_id
+                ));
+            } catch (Exception $e) {
+                die("Erreur mise à jour du mot de passe. {$e->getMessage()}");
+            }
         }
-    }    
+    }
 
     public function addGamePlayer($player_id, $game_bet, $game_profit, $player_money)
     {
