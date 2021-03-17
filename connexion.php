@@ -3,6 +3,9 @@
 //Démarre la session pour suivre les données du joueur
 session_start();
 
+//J'inclus ma classe DB
+require_once('./classes/DB.php');
+
 //Gestion des différentes erreurs
 //Cela permet de simplifier la gestion de l'affichage dans le code HTML/PHP
 $errors = array(
@@ -31,31 +34,16 @@ if (isset($_GET['deco'])) {
     if (count($_POST) > 0) {
         //Je vérifie que tous les champs aient été remplis
         if (isset($_POST['connexionCompleted']) && isset($_POST['username']) && isset($_POST['password'])) {
+            $db = new DB();
             //Je récupére les données de connexion de l'utilisateur
-            try {
-                $db = new PDO('mysql:host=localhost:3308;dbname=roulette;charset=utf8;', 'root', 'root');
-                $query = 'SELECT * FROM player WHERE name=?';
-                $prepared = $db->prepare($query);
-                $prepared->execute(array($_POST['username']));
-                $data = $prepared->fetch();
-            } catch (Exception $e) {
-                die('Erreur : ' . $e->getMessage());
-            }
+            $reponse = $db->playerConnection($_POST['username'], $_POST['password']);
             //Si l'utilisateur a été trouvé dans la base de données
-            if ($data != null) {
-                //Je compare les hashages BCRYPT des mots de passes
-                if (password_verify($_POST['password'], $data['password'])) {
-                    //J'enregistre les données de l'utilisateur dans le tableau SESSION
-                    $_SESSION['iduser'] = $data['id'];
-                    $_SESSION['username'] = $data['name'];
-                    $_SESSION['money'] = $data['money'];
-                    //Je redirige vers la page du jeu roulette pour commencer le jeu
-                    header('Location: roulette.php');
-                } else {
-                    $errors['password'] = true;
-                }
+            if ($reponse['success']) {
+                //Je redirige vers la page du jeu roulette pour commencer le jeu
+                header('Location: roulette.php');
             } else {
-                $errors['username'] = true;
+                $errors['username'] = $reponse['errors']['username'];
+                $errors['password'] = $reponse['errors']['password'];
             }
         } else {
             $errors['sections'] = true;
@@ -89,12 +77,12 @@ if (isset($_GET['deco'])) {
         }
         ?>
         <div class="container align-self-start">
-                <div class="row py-3">
-                    <div class="col-12">
-                        <a href="./inscription.php" class="d-block text-end streched-link">S'inscrire</a>
-                    </div>
+            <div class="row py-3">
+                <div class="col-12">
+                    <a href="./inscription.php" class="d-block text-end streched-link">S'inscrire</a>
                 </div>
             </div>
+        </div>
         <div class="container">
             <div class="row text-center mb-5">
                 <div class="col-12">

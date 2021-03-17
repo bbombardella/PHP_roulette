@@ -3,6 +3,9 @@
 //Démarre la session pour suivre les données du joueur
 session_start();
 
+//J'inclus ma classe DB
+require_once('./classes/DB.php');
+
 //Gestion des différentes erreurs
 //Cela permet de simplifier la gestion de l'affichage dans le code HTML/PHP
 $errors = array(
@@ -16,48 +19,17 @@ $errors = array(
 if (count($_POST) > 0) {
     //Je vérifie que tous les champs aient été remplis
     if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['inscriptionCompleted'])) {
+        $db = new DB();
         //J'ajoute le nouvel utilisateur dans la base de données
-        try {
-            //Connexion à la base de données
-            $db = new PDO('mysql:host=localhost:3308;dbname=roulette;charset=utf8;', 'root', 'root');
+        $response = $db->addPlayer($_POST['username'], $_POST['password']);
 
-            //Vérification utilisateur existant
-            //Création requête + préparation + éxécution
-            $query = 'SELECT * FROM player WHERE name=:v_name'; //DEFAULT pour l'id car AUTO_INCREMENT, et pour la date car SYSDATE par défaut
-            $prepared = $db->prepare($query);
-            $prepared->execute(array(
-                'v_name' => $_POST['username']
-            ));
-            $is_user_exist = $prepared->fetch();
-
-            //Si l'utilisateur n'existe pas, je peux faire mon insertion
-            if (!$is_user_exist) {
-                //Insertion de informations du nouvel utilisateur
-                //Création requête + préparation + éxécution
-                $query = 'INSERT INTO player(id,name,password,money) VALUES(DEFAULT,:v_name,:v_password,DEFAULT)'; //DEFAULT pour l'id car AUTO_INCREMENT, et pour la date car SYSDATE par défaut
-                $prepared = $db->prepare($query);
-                $prepared->execute(array(
-                    'v_name' => $_POST['username'],
-                    'v_password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
-                ));
-
-                //Je recupère l'id du nouvel utilisateur et de l'argent
-                //car je vais avoir besoin de le stocker dans SESSION
-                $query = 'SELECT id, money FROM player WHERE name=?';
-                $prepared = $db->prepare($query);
-                $prepared->execute(array($_POST['username']));
-                $user_data = $prepared->fetch();
-                //J'enregistre les données de l'utilisateur dans le tableau SESSION
-                $_SESSION['iduser'] = $user_data['id'];
-                $_SESSION['username'] = $_POST['username'];
-                $_SESSION['money'] = $user_data['money'];
-                //Je redirige vers la page du jeu roulette pour commencer le jeu
-                header('Location: roulette.php');
-            } else {
-                $errors['alreadyExists'] = true;
-            }
-        } catch (Exception $e) {
-            die('Erreur : ' . $e->getMessage());
+        //Si l'insertion est un succès
+        if ($response['success']) {
+            //Je redirige vers la page du jeu roulette pour commencer le jeu
+            header('Location: roulette.php');
+        } else {
+            //Sinon ce que l'utilisateur exite déjà dans la base de données
+            $errors['alreadyExists'] = $response['errors']['alreadyExists'];
         }
     } else {
         if (!isset($errors['username'])) {

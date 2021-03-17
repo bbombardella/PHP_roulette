@@ -153,10 +153,6 @@ class DB
                 $_SESSION['iduser'] = $data['id'];
                 $_SESSION['username'] = $data['name'];
                 $_SESSION['money'] = $data['money'];
-
-                //-----TODO-----
-                //Je redirige vers la page du jeu roulette pour commencer le jeu
-                //header('Location: roulette.php');
             } else {
                 //Le mot de passe n'est pas le bon
                 $response['errors']['password'] = true;
