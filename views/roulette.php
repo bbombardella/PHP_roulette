@@ -16,7 +16,7 @@
             <div class="container align-self-start">
                 <div class="row py-3">
                     <div class="col-6">
-                        <p><ins>Votre balance :</ins> <mark><?= $_SESSION['money'] ?>€</mark></p>
+                        <p><ins>Votre balance :</ins> <mark><?= $_SESSION['player']->money ?>€</mark></p>
                     </div>
                     <div class="col-5">
                         <a href="./index.php?route=deconnexion" class="d-block text-end streched-link">Se déconnecter</a>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="row text-center mb-5">
                     <div class="col-12">
-                        <h2><small class="text-muted"><?= $_SESSION['username'] ?></small></h2>
+                        <h2><small class="text-muted"><?= $_SESSION['player']->name ?></small></h2>
                     </div>
                 </div>
                 <div class="row justify-content-center">

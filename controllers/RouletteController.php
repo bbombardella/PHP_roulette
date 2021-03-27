@@ -1,7 +1,7 @@
 <?php
 
 //Je redirige sur la page de connexion s'il n'existe pas de session sur le joueur
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['player'])) {
     header('Location: index.php?route=connexion');
 }
 
@@ -16,8 +16,8 @@ if (count($_POST) > 0) {
     //Je vérifie que tous les champs aient été remplis
     if (isset($_POST['mise']) && isset($_POST['nombre']) && isset($_POST['parite']) && isset($_POST['btnJouer'])) {
         //Je vérifie que le jouer est assez d'argent pour jouer
-        if ($_SESSION['money'] > $_POST['mise']) {
-            $_SESSION['money'] -= $_POST['mise'];
+        if ($_SESSION['player']->balance > $_POST['mise']) {
+            $_SESSION['player']->balance -= $_POST['mise'];
             $numero = rand(1, 36);
 
             //Si on n'a pas préciser de nombre, ce que l'on souhaite jouer sur la parité
@@ -33,7 +33,7 @@ if (count($_POST) > 0) {
                         //Définition du gain
                         $gain = $_POST['mise'] * 2;
                         //Mise à jour de l'argent disponible
-                        $_SESSION['money'] += $gain;
+                        $_SESSION['player']->balance += $gain;
                         //Gestion des états
                         $tirage_result['success'] = true;
                         //Message associé
@@ -48,7 +48,7 @@ if (count($_POST) > 0) {
                     //Si on a miser sur le fait que le chiffre soit impair et qu'il est impair
                     if ($_POST['parite'] == 'impair') {
                         $gain = $_POST['mise'] * 2;
-                        $_SESSION['money'] += $gain;
+                        $_SESSION['player']->balance += $gain;
                         $tirage_result['success'] = true;
                         $tirage_result['message'] = "Vous pensiez que le résultat serait impair et le $numero a été tiré. Bravo, vous gagnez {$gain}€";
                     } else {
@@ -61,7 +61,7 @@ if (count($_POST) > 0) {
                 //Si on tombe parfaitement sur le numéro parié
                 if ($_POST['nombre'] == $numero) {
                     $gain = $_POST['mise'] * 35;
-                    $_SESSION['money'] += $gain;
+                    $_SESSION['player']->balance += $gain;
                     $tirage_result['success'] = true;
                     $tirage_result['message'] = "Vous avez misé sur le {$_POST['mise']}, et vous avez gagné !";
                 } else {
@@ -77,7 +77,7 @@ if (count($_POST) > 0) {
             //et je mets à jouer l'argent disponible du joueur
             $db = new DB();
 
-            $db->addGamePlayer($_SESSION['iduser'], $_POST['mise'], $gain, $_SESSION['money']);
+            $db->addGamePlayer($_SESSION['iduser'], $_POST['mise'], $gain, $_SESSION['player']->balance);
         } else {
             $tirage_result['success'] = false;
             $tirage_result['message'] = 'Votre mise est supérieure à votre balance';

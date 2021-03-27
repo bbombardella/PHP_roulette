@@ -1,7 +1,6 @@
 <?php
 
 require 'models/DB.php';
-require 'models/Player/DTO_Player.php';
 
 class DAO_Player
 {
