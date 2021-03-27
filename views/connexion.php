@@ -1,58 +1,3 @@
-<?php
-
-//Démarre la session pour suivre les données du joueur
-session_start();
-
-//J'inclus ma classe DB
-require_once('./classes/DB.php');
-
-//Gestion des différentes erreurs
-//Cela permet de simplifier la gestion de l'affichage dans le code HTML/PHP
-$errors = array(
-    'sections' => false,
-    'username' => false,
-    'password' => false
-);
-
-//Permet de déterminer si je dois afficher une fenêtre
-//m'indiquant que je sois bien déconnecté.e
-$deco = false;
-
-//Le cas où une déconnexion est demandé
-if (isset($_GET['deco'])) {
-    //Je détruis la session à propos du joueur
-    session_destroy();
-    //J'indique que c'est bien une déconnexion que je traite
-    $deco = true;
-
-    //Le cas où je suis déjà connecté, je redirige sur la page du jeu roulette
-} else if (isset($_SESSION['username'])) {
-    header('Location: roulette.php');
-} else {
-
-    //Je vérifie s'il y a eu une rêquete POST, sinon j'affiche ma page "normalement"
-    if (count($_POST) > 0) {
-        //Je vérifie que tous les champs aient été remplis
-        if (isset($_POST['connexionCompleted']) && isset($_POST['username']) && isset($_POST['password'])) {
-            $db = new DB();
-            //Je récupére les données de connexion de l'utilisateur
-            $reponse = $db->playerConnection($_POST['username'], $_POST['password']);
-            //Si l'utilisateur a été trouvé dans la base de données
-            if ($reponse['success']) {
-                //Je redirige vers la page du jeu roulette pour commencer le jeu
-                header('Location: roulette.php');
-            } else {
-                $errors['username'] = $reponse['errors']['username'];
-                $errors['password'] = $reponse['errors']['password'];
-            }
-        } else {
-            $errors['sections'] = true;
-        }
-    }
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -67,19 +12,10 @@ if (isset($_GET['deco'])) {
 
 <body style="min-height:100vh;min-width:100vw;">
     <main class="d-flex align-items-center flex-column justify-content-center min-vh-100">
-        <?php
-        if ($deco) {
-            echo ('
-                <div class="alert alert-success" role="alert">
-                    Vous avez été déconnecté avec succès !
-                </div>
-            ');
-        }
-        ?>
         <div class="container align-self-start">
             <div class="row py-3">
                 <div class="col-12">
-                    <a href="./inscription.php" class="d-block text-end streched-link">S'inscrire</a>
+                    <a href="./index.php?route=inscription" class="d-block text-end streched-link">S'inscrire</a>
                 </div>
             </div>
         </div>
@@ -96,7 +32,7 @@ if (isset($_GET['deco'])) {
             </div>
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-6 col-10">
-                    <form method="POST" action="./connexion.php">
+                    <form method="POST" action="./index.php?route=connexion">
                         <div class="form-floating mb-3">
                             <?php
                             if ($errors['sections']) {
