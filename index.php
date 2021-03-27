@@ -1,5 +1,7 @@
 <?php
 
+//Si je veux inclure un objet dans la table session,
+//je dois inclure la classe avant
 include('models/Player/DTO_Player.php');
 
 //Démarre la session pour suivre les données du joueur

@@ -74,10 +74,12 @@ if (count($_POST) > 0) {
             var_dump($_SESSION);
 
             //Dans tous les cas, j'ajoute cette ligne de jeu dans la base de données
-            //et je mets à jouer l'argent disponible du joueur
-            $db = new DB();
+            //et je mets à jour l'argent disponible du joueur
+            $game_dao = new DAO_Game();
+            $player_dao = new DAO_Player();
 
-            $db->addGamePlayer($_SESSION['iduser'], $_POST['mise'], $gain, $_SESSION['player']->balance);
+            $game_dao->insert($_SESSION['player']->money, $_POST['mise'], $gain);
+            $player_dao->update('money', $_SESSION['player']->money);
         } else {
             $tirage_result['success'] = false;
             $tirage_result['message'] = 'Votre mise est supérieure à votre balance';

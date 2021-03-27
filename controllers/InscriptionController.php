@@ -13,9 +13,9 @@ $errors = array(
 if (count($_POST) > 0) {
     //Je vérifie que tous les champs aient été remplis
     if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['inscriptionCompleted'])) {
-        $db = new DB();
+        $player_dao = new DAO_Player();
         //J'ajoute le nouvel utilisateur dans la base de données
-        $response = $db->addPlayer($_POST['username'], $_POST['password']);
+        $response = $player_dao->insert($_POST['username'], $_POST['password']);
 
         //Si l'insertion est un succès
         if ($response['success']) {

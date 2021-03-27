@@ -105,10 +105,10 @@ class DAO_Player
         return ($response);
     }
 
-    public function update($attr, $player, $player_update_data)
+    public function update($attr, $player_update_data)
     {
         //Pour la mise à jour
-        if ($attr === 'balance') {
+        if ($attr === 'money') {
             try {
                 //Mise à jour de l'argent du joueur
                 //Création requête + préparation + éxécution
@@ -121,7 +121,6 @@ class DAO_Player
             } catch (Exception $e) {
                 die("Erreur mise à jour de l'argent du joueur. {$e->getMessage()}");
             }
-            $player->money = $player_update_data;
         } else if ($attr === 'password') { //Pour la mise à jour du mot de passe déjà "hashé"
             try {
                 //Mise à jour du mot de passe du joueur déjà "hashé"
@@ -135,7 +134,6 @@ class DAO_Player
             } catch (Exception $e) {
                 die("Erreur mise à jour du mot de passe. {$e->getMessage()}");
             }
-            $player->password = $player_update_data;
         }
     }
 
