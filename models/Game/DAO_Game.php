@@ -1,6 +1,5 @@
 <?php
 
-require_once('models/DB.php');
 require_once('models/Game/DAO_Game.php');
 
 class DAO_Game {
@@ -9,7 +8,8 @@ class DAO_Game {
 
     public function __construct()
     {
-        $this->bdd = new DB();
+        $db_class = new DB();
+        $this->bdd = $db_class->bdd;
     }
 
     public function getById($id) {
@@ -22,7 +22,7 @@ class DAO_Game {
         //requête all
     }
 
-    public function insert($player_id, $game_bet, $game_profit, $player_money) {
+    public function insert($player_id, $game_bet, $game_profit) {
         try {
             //Insertion de informations sur le jeu
             //Création requête + préparation + éxécution

@@ -11,7 +11,6 @@ class DAO_Player
     {
         $db_class = new DB();
         $this->bdd = $db_class->bdd;
-        var_dump($this->bdd);
     }
 
     public function getById($player_id)
@@ -105,7 +104,7 @@ class DAO_Player
         return ($response);
     }
 
-    public function update($attr, $player_update_data)
+    public function update($attr, $player_id, $player_update_data)
     {
         //Pour la mise à jour
         if ($attr === 'money') {
@@ -116,7 +115,7 @@ class DAO_Player
                 $prepared = $this->bdd->prepare($query);
                 $prepared->execute(array(
                     'v_money' => $player_update_data,
-                    'v_player_id' => $player->id,
+                    'v_player_id' => $player_id,
                 ));
             } catch (Exception $e) {
                 die("Erreur mise à jour de l'argent du joueur. {$e->getMessage()}");
