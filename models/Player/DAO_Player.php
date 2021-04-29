@@ -17,7 +17,7 @@ class DAO_Player
     {
         try {
             //Création requête + préparation + éxécution
-            $query = 'SELECT * FROM player WHERE name=:v_id'; //DEFAULT pour l'id car AUTO_INCREMENT, et pour la date car SYSDATE par défaut
+            $query = 'SELECT * FROM player WHERE id=:v_id'; //DEFAULT pour l'id car AUTO_INCREMENT, et pour la date car SYSDATE par défaut
             $prepared = $this->bdd->prepare($query);
             $prepared->execute(array(
                 'v_id' => $player_id,
