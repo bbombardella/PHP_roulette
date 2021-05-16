@@ -73,13 +73,10 @@ if (count($_POST) > 0) {
 
             //Dans tous les cas, j'ajoute cette ligne de jeu dans la base de données
             //et je mets à jour l'argent disponible du joueur
-            require 'models/DB.php';
-            require 'models/Game/DAO_Game.php';
-            require 'models/Player/DAO_Player.php';
             $game_dao = new DAO_Game();
             $player_dao = new DAO_Player();
 
-            $game_dao->insert($_SESSION['player']->money, $_POST['mise'], $gain);
+            $game_dao->insert($_SESSION['player']->id, $_POST['mise'], $gain);
             $player_dao->updateMoney($_SESSION['player']->id, $_SESSION['player']->money);
         } else {
             $tirage_result['success'] = false;
@@ -87,5 +84,4 @@ if (count($_POST) > 0) {
         }
     }
 }
-;
 require_once 'views/roulette.php';

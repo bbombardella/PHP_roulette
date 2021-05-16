@@ -37,7 +37,7 @@ class DAO_Game
         return ($game);
     }
 
-    public function insert($game_id, $game_bet, $game_profit)
+    public function insert($player_id, $game_bet, $game_profit)
     {
         try {
             //Insertion de informations sur le jeu
@@ -45,7 +45,7 @@ class DAO_Game
             $query = 'INSERT INTO game(id,player,date,bet,profit) VALUES (DEFAULT,:v_player,DEFAULT,:v_bet,:v_profit)';
             $prepared = $this->bdd->prepare($query);
             $prepared->execute(array(
-                'v_player' => $game_id,
+                'v_player' => $player_id,
                 'v_bet' => $game_bet,
                 'v_profit' => $game_profit,
             ));

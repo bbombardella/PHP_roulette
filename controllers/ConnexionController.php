@@ -9,11 +9,10 @@ $errors = array(
 );
 
 //Je vérifie s'il y a eu une rêquete POST, sinon j'affiche ma page "normalement"
-if(!isset($_SESSION['player'])) {
+if (!isset($_SESSION['player'])) {
     if (count($_POST) > 0) {
         //Je vérifie que tous les champs aient été remplis
         if (isset($_POST['connexionCompleted']) && isset($_POST['username']) && isset($_POST['password'])) {
-            require('models/Player/DAO_Player.php');
             $player_dao = new DAO_Player();
             //Je récupére les données de connexion de l'utilisateur
             $reponse = $player_dao->connection($_POST['username'], $_POST['password']);

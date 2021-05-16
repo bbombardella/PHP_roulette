@@ -1,5 +1,11 @@
 <?php
 
+//Je dois déclarer mes classes avant le session_start() car sinon j'obtiens
+//__PHP_Incomplete_Class Object quand je stocke un objet dans la classe session
+require 'models/DB.php';
+require 'models/Game/DAO_Game.php';
+require 'models/Player/DAO_Player.php';
+
 //Démarre la session pour suivre les données du joueur
 session_start();
 

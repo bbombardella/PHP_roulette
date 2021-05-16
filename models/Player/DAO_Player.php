@@ -118,12 +118,12 @@ class DAO_Player
     public function updatePassword($player_id, $player_password)
     {
         try {
-            //Mise à jour du mot de passe du joueur déjà "hashé"
+            //Mise à jour du mot de passe du joueur non "hashé"
             //Création requête + préparation + éxécution
             $query = 'UPDATE player SET password=:v_password WHERE id=:v_player_id';
             $prepared = $this->bdd->prepare($query);
             $prepared->execute(array(
-                'v_password' => $player_password,
+                'v_password' => password_hash($player_password, PASSWORD_BCRYPT),
                 'v_player_id' => $player_id,
             ));
         } catch (Exception $e) {
