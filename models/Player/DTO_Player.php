@@ -1,6 +1,7 @@
 <?php
 
-class DTO_Player {
+class DTO_Player
+{
 
     private $id;
     private $name;
@@ -17,28 +18,30 @@ class DTO_Player {
 
     public function __toString()
     {
-        return("Player {$this->id} -- {$this->name} ayant pour solde {$this->money}€");
+        return ("Player {$this->id} -- {$this->name} ayant pour solde {$this->money}€");
     }
 
-    public function __get($attr) {
-        switch($attr) {
+    public function __get($attr)
+    {
+        switch ($attr) {
             case 'id':
-                return($this->id);
+                return ($this->id);
                 break;
             case 'name':
-                return($this->name);
+                return ($this->name);
                 break;
             case 'password':
-                return($this->password);
+                return ($this->password);
                 break;
             case 'money':
-                return($this->money);
+                return ($this->money);
                 break;
         }
     }
 
-    public function __set($attr, $value) {
-        switch($attr) {
+    public function __set($attr, $value)
+    {
+        switch ($attr) {
             case 'id':
                 $this->id = $value;
                 break;

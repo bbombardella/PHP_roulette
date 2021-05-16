@@ -1,34 +1,30 @@
 <?php
 
-//Si je veux inclure un objet dans la table session,
-//je dois inclure la classe avant
-include('models/Player/DTO_Player.php');
-
 //Démarre la session pour suivre les données du joueur
 session_start();
 
-$route=$_GET['route'];
+$route = $_GET['route'];
 
 switch ($route) {
     case '':
-        require_once('controllers/IndexController.php');
+        require_once 'controllers/IndexController.php';
         break;
     case 'connexion':
-        require_once('controllers/ConnexionController.php');
+        require_once 'controllers/ConnexionController.php';
         break;
     case 'inscription':
-        require_once('controllers/InscriptionController.php');
+        require_once 'controllers/InscriptionController.php';
         break;
     case 'deconnexion':
         //Je détruis la session à propos du joueur
         session_destroy();
-        include_once('views/deconnexion.php');
+        require_once 'views/deconnexion.php';
         break;
     case 'roulette':
-        require_once('controllers/RouletteController.php');
+        require_once 'controllers/RouletteController.php';
         break;
     case 'session':
-        include_once('views/session.php');
+        require_once 'views/session.php';
         break;
     default:
         //erreur 404

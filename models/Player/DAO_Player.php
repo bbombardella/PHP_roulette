@@ -1,6 +1,6 @@
 <?php
 
-require 'models/DB.php';
+require_once 'models/Player/DTO_player.php';
 
 class DAO_Player
 {
@@ -59,11 +59,6 @@ class DAO_Player
         return ($player);
     }
 
-    public function getAll()
-    {
-        //requête all
-    }
-
     public function insert($player_username, $player_password)
     {
         $response = array(
@@ -104,35 +99,35 @@ class DAO_Player
         return ($response);
     }
 
-    public function update($attr, $player_id, $player_update_data)
+    public function updateMoney($player_id, $player_money)
     {
-        //Pour la mise à jour
-        if ($attr === 'money') {
-            try {
-                //Mise à jour de l'argent du joueur
-                //Création requête + préparation + éxécution
-                $query = 'UPDATE player SET money=:v_money WHERE id=:v_player_id';
-                $prepared = $this->bdd->prepare($query);
-                $prepared->execute(array(
-                    'v_money' => $player_update_data,
-                    'v_player_id' => $player_id,
-                ));
-            } catch (Exception $e) {
-                die("Erreur mise à jour de l'argent du joueur. {$e->getMessage()}");
-            }
-        } else if ($attr === 'password') { //Pour la mise à jour du mot de passe déjà "hashé"
-            try {
-                //Mise à jour du mot de passe du joueur déjà "hashé"
-                //Création requête + préparation + éxécution
-                $query = 'UPDATE player SET password=:v_password WHERE id=:v_player_id';
-                $prepared = $this->bdd->prepare($query);
-                $prepared->execute(array(
-                    'v_money' => $player_update_data,
-                    'v_player_id' => $player_id,
-                ));
-            } catch (Exception $e) {
-                die("Erreur mise à jour du mot de passe. {$e->getMessage()}");
-            }
+        try {
+            //Mise à jour de l'argent du joueur
+            //Création requête + préparation + éxécution
+            $query = 'UPDATE player SET money=:v_money WHERE id=:v_player_id';
+            $prepared = $this->bdd->prepare($query);
+            $prepared->execute(array(
+                'v_money' => $player_money,
+                'v_player_id' => $player_id,
+            ));
+        } catch (Exception $e) {
+            die("Erreur mise à jour de l'argent du joueur. {$e->getMessage()}");
+        }
+    }
+
+    public function updatePassword($player_id, $player_password)
+    {
+        try {
+            //Mise à jour du mot de passe du joueur déjà "hashé"
+            //Création requête + préparation + éxécution
+            $query = 'UPDATE player SET password=:v_password WHERE id=:v_player_id';
+            $prepared = $this->bdd->prepare($query);
+            $prepared->execute(array(
+                'v_password' => $player_password,
+                'v_player_id' => $player_id,
+            ));
+        } catch (Exception $e) {
+            die("Erreur mise à jour du mot de passe. {$e->getMessage()}");
         }
     }
 

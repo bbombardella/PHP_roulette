@@ -20,29 +20,29 @@ class DTO_Game
 
     public function __get($attr)
     {
-        switch($attr) {
-            case 'id' :
-                return($this->id);
+        switch ($attr) {
+            case 'id':
+                return ($this->id);
                 break;
             case 'player':
-                return($this->player);
+                return ($this->player);
                 break;
             case 'date':
-                return($this->date);
+                return ($this->date);
                 break;
             case 'bet':
-                return($this->bet);
+                return ($this->bet);
                 break;
             case 'profit':
-                return($this->profit);
+                return ($this->profit);
                 break;
         }
     }
 
     public function __set($attr, $value)
     {
-        switch($attr) {
-            case 'id' :
+        switch ($attr) {
+            case 'id':
                 $this->id = $value;
                 break;
             case 'player':
