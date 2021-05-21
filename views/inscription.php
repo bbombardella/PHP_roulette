@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription -- Roulette</title>
-    <?php include 'views/style.php'; ?>
+    <?php require_once 'views/style.php'; ?>
 </head>
 
 <body style="min-height:100vh;min-width:100vw;">
