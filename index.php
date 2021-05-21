@@ -29,9 +29,6 @@ switch ($route) {
     case 'roulette':
         require_once 'controllers/RouletteController.php';
         break;
-    case 'session':
-        require_once 'views/session.php';
-        break;
     default:
         //erreur 404
         echo ('404');
